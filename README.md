@@ -23,6 +23,10 @@ the cluster name as the value.
 The minimial required policy for a worker node with the AWS cloud provider
 enabled.
 
+## [cluster-autoscaler](cluster-autoscaler.json)
+
+Based on [this documentation](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md#permissions)
+
 ## [ecr](ecr.json)
 Allows an instance to authenticate with ECR and pull images.
 
