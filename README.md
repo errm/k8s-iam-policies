@@ -43,12 +43,31 @@ found [here](https://github.com/aws/amazon-vpc-cni-k8s#requirements).
 
 ## Usage
 
+### [setup.sh](setup.sh)
+
+A shell script for setting this stuff up quickly.
+
+Run `./setup.sh` to create Instance Profiles for `K8sMaster` and `K8sNode`.
+
+Depends on the [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html).
+
+Standalone so can be downloaded and run from github:
+
+```
+$ curl https://raw.githubusercontent.com/errm/k8s-iam-policies/master/setup.sh -o setup.sh
+$ sh -e setup.sh
+```
+
+
+** Warning **
+No idempotency, so this will fail if you try to run it twice.
+
 ### [CloudFormation](cf.yaml)
 
 e.g.:
 
 ```
-aws cloudformation create-stack --capabilities CAPABILITY_IAM --stack-name K8sIamPolicies --template-body file://cf_instance_profiles.yaml
+aws cloudformation create-stack --capabilities CAPABILITY_IAM --stack-name K8sIamPolicies --template-body file://cf.yaml
 ```
 
 The Instance Profile ARNs are outputs so you will see them once the stack has finished creating when running `aws cloudformation describe-stacks`
@@ -62,17 +81,6 @@ e.g:
 ```
 aws iam create-policy --policy-name K8sMaster --policy-document file://master.json
 ```
-
-### [setup.sh](setup.sh)
-
-A shell script for setting this stuff up quickly.
-
-Run `./setup.sh` to create Instance Profiles for `K8sMaster` and `K8sNode`.
-
-Depends on the [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html).
-
-** Warning **
-No idempotency, so this will fail if you try to run it twice.
 
 ## License / Disclamer
 
