@@ -56,7 +56,7 @@ def stack
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "Kubernetes IAM Instance Profiles",
     "Resources": resources(
-      profile("Master", "master", "ecr", "cni", "autoscaler"),
+      profile("Master", "master", "ecr", "cni", "autoscaler", "loadbalancing"),
       profile("Node", "node", "ecr", "cni"),
     ),
     "Outputs": outputs("Master", "Node"),

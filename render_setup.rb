@@ -12,7 +12,7 @@ SCRIPT  = <<-HEREDOC
 HEREDOC
 
 {
-  "K8sMaster" => %w[master ecr cni autoscaler],
+  "K8sMaster" => %w[master ecr cni autoscaler loadbalancing],
   "K8sNode"   => %w[node ecr cni],
 }.each do |role, policies|
   SCRIPT << "aws iam create-role --role-name #{role} --assume-role-policy-document #{compact_json("ec2-role-trust-policy.json")}\n"

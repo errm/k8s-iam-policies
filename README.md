@@ -29,6 +29,9 @@ The required permissions required to use the Kubernetes Cluster Autoscaler.
 
 Based on [this documentation](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md#permissions)
 
+## [loadbalancing](loadbalancing.json)
+The required permissions for Kuberntes to controll ELB and NLB load ballancers.
+
 ## [ecr](ecr.json)
 Allows an instance to authenticate with ECR and pull images.
 

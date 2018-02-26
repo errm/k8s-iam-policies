@@ -2,15 +2,23 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "K8sClusterAutoscaler",
+      "Sid": "K8sClusterAutoscalerDescribe",
       "Effect": "Allow",
       "Action": [
         "autoscaling:DescribeAutoScalingGroups",
         "autoscaling:DescribeAutoScalingInstances",
         "autoscaling:DescribeTags",
-        "autoscaling:DescribeLaunchConfigurations",
+        "autoscaling:DescribeLaunchConfigurations"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "K8sClusterAutoscalerTaggedResourcesWritable",
+      "Effect": "Allow",
+      "Action": [
         "autoscaling:SetDesiredCapacity",
-        "autoscaling:TerminateInstanceInAutoScalingGroup"
+        "autoscaling:TerminateInstanceInAutoScalingGroup",
+        "autoscaling:UpdateAutoScalingGroup"
       ],
       "Resource": "*"
     }
