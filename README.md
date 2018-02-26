@@ -36,6 +36,13 @@ Policy for allowing the L-IPAM daemon in the amazon-vpc-cni-k8s CNI plugin
 to attach ENIs and private IPs to instances. Based on the documentation
 found [here](https://github.com/aws/amazon-vpc-cni-k8s#requirements).
 
+## [setup.sh](setup.sh)
+
+Yuck, a dirty shell script for setting this stuff up quickly.
+
+Run `./setup.sh` to create all the Policies and add them to
+Roles & Instance Profiles for `K8sMaster` and `K8sNode`.
+
 ## License / Disclamer
 
 [Apache License Version 2.0](LICENSE)
