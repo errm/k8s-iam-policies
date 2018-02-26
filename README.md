@@ -65,9 +65,8 @@ aws iam create-policy --policy-name K8sMaster --policy-document file://master.js
 A shell script for setting this stuff up quickly.
 
 Run `./setup.sh` to create Instance Profiles for `K8sMaster` and `K8sNode`.
-Once the script is done, it spits out the InstanceProfile ARNs ready to use in your cluster.
 
-Depends on bash, the [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [jq](https://stedolan.github.io/jq/download/)
+Depends on the [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html).
 
 ** Warning **
 No idempotency, so this will fail if you try to run it twice.
