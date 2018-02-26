@@ -9,6 +9,9 @@ rely on the contents of this repository for your own use, rather review them
 and then pull a copy into your own infrastructure as code.
 
 
+## [ecr](ecr.json)
+Allows an instance to authenticate with ECR and pull images.
+
 ## [amazon-vpc-cni-k8s](amazon-vpc-cni-k8s.json)
 
 Policy for allowing the L-IPAM daemon in the amazon-vpc-cni-k8s CNI plugin
