@@ -27,11 +27,11 @@ function createInstanceProfile {
   aws iam add-role-to-instance-profile --instance-profile-name $1 --role-name $1
 }
 
-K8sNodeAwsVpcCNIArn=$(createPolicy K8sNodeAwsVpcCNI)
-K8sClusterAutoscalerArn=$(createPolicy K8sClusterAutoscaler)
-K8sECRArn=$(createPolicy K8sEcr)
-K8sMasterArn=$(createPolicy K8sMaster)
-K8sNodeArn=$(createPolicy K8sNode)
+AutoscalerArn=$(createPolicy autoscaler)
+ECRArn=$(createPolicy ecr)
+MasterArn=$(createPolicy master)
+NodeArn=$(createPolicy node)
+CNIArn=$(createPolicy cni)
 
-createInstanceProfile K8sMaster $K8sMasterArn $K8sECRArn $K8sNodeAwsVpcCNIArn $K8sClusterAutoscalerArn
-createInstanceProfile K8sNode $K8sNodeArn $K8sECRArn $K8sNodeAwsVpcCNIArn
+createInstanceProfile K8sMaster $MasterArn $K8sECRArn $CNIArn $AutoscalerArn
+createInstanceProfile K8sNode $NodeArn $ECRArn $CNIArn
