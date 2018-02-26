@@ -8,7 +8,7 @@ IAM policies should be best implimented for AWS. Therefore please do not
 rely on the contents of this repository for your own use, rather review them
 and then pull a copy into your own infrastructure as code.
 
-## [master](master.json)
+## [K8sMaster](K8sMaster.json)
 The minimial required policy for a master node with the AWS cloud provider
 enabled.
 
@@ -19,18 +19,18 @@ This depends on your EC2 nodes having the `KubernetesCluster` tag with
 the cluster name as the value.
 
 
-## [node](node.json)
+## [K8sNode](K8sNode.json)
 The minimial required policy for a worker node with the AWS cloud provider
 enabled.
 
-## [cluster-autoscaler](cluster-autoscaler.json)
+## [K8sClusterAutoscaler](K8sClusterAutoscaler.json)
 
 Based on [this documentation](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md#permissions)
 
-## [ecr](ecr.json)
+## [K8sECR](K8sECR.json)
 Allows an instance to authenticate with ECR and pull images.
 
-## [amazon-vpc-cni-k8s](amazon-vpc-cni-k8s.json)
+## [K8sNodeAwsVpcCNI](K8sNodeAwsVpcCNI.json)
 
 Policy for allowing the L-IPAM daemon in the amazon-vpc-cni-k8s CNI plugin
 to attach ENIs and private IPs to instances. Based on the documentation
