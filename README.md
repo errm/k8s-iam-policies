@@ -41,7 +41,15 @@ found [here](https://github.com/aws/amazon-vpc-cni-k8s#requirements).
 Yuck, a dirty shell script for setting this stuff up quickly.
 
 Run `./setup.sh` to create all the Policies and add them to
-Roles & Instance Profiles for `K8sMaster` and `K8sNode`.
+Instance Profiles for `K8sMaster` and `K8sNode`.
+
+Once the script is done, it spits out the InstanceProfile
+ARNs ready to use in your cluster.
+
+Depends on bash, the [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [jq](https://stedolan.github.io/jq/download/)
+
+** Warning **
+No idempotency, so this will fail hard if you run it twice!
 
 ## License / Disclamer
 
