@@ -38,12 +38,7 @@
         "ec2:DetachVolume",
         "ec2:RevokeSecurityGroupIngress"
       ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/KubernetesCluster": "*"
-        }
-      }
+      "Resource": "*"
     }
   ]
 }
