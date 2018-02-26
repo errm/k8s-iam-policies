@@ -1,37 +1,16 @@
 #!/bin/bash
 
 set -euo pipefail
-
-function createPolicy {
-  aws iam create-policy --policy-name $1 --policy-document file://$1.json | jq -r '.Policy.Arn'
-}
-
-function attachPolicy {
-  aws iam attach-role-policy --role-name $1 --policy-arn $2
-}
-
-function attachPolices {
-  for i in "${@:2}"
-  do
-    attachPolicy $1 $i
-  done
-}
-
-function createInstanceProfile {
-  aws iam create-role --role-name $1 --assume-role-policy-document file://ec2-role-trust-policy.json > /dev/null
-  for i in "${@:2}"
-  do
-    attachPolicy $1 $i
-  done
-  echo $(aws iam create-instance-profile      --instance-profile-name $1 | jq -r ".InstanceProfile.Arn")
-  aws iam add-role-to-instance-profile --instance-profile-name $1 --role-name $1
-}
-
-AutoscalerArn=$(createPolicy autoscaler)
-ECRArn=$(createPolicy ecr)
-MasterArn=$(createPolicy master)
-NodeArn=$(createPolicy node)
-CNIArn=$(createPolicy cni)
-
-createInstanceProfile K8sMaster $MasterArn $K8sECRArn $CNIArn $AutoscalerArn
-createInstanceProfile K8sNode $NodeArn $ECRArn $CNIArn
+aws iam create-role --role-name K8sMaster --assume-role-policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ec2.amazonaws.com"},"Action":"sts:AssumeRole"}]}' > /dev/null
+aws iam put-role-policy --role-name K8sMaster --policy-name master --policy-document '{"Version":"2012-10-17","Statement":[{"Sid":"K8sMasterDescribeResources","Effect":"Allow","Action":["ec2:DescribeInstances","ec2:DescribeRegions","ec2:DescribeRouteTables","ec2:DescribeSecurityGroups","ec2:DescribeSubnets","ec2:DescribeVolumes"],"Resource":"*"},{"Sid":"K8sMasterAllResourcesWriteable","Effect":"Allow","Action":["ec2:CreateRoute","ec2:CreateSecurityGroup","ec2:CreateTags","ec2:CreateVolume","ec2:ModifyInstanceAttribute"],"Resource":"*"},{"Sid":"K8sMasterTaggedResourcesWritable","Effect":"Allow","Action":["ec2:AttachVolume","ec2:AuthorizeSecurityGroupIngress","ec2:DeleteRoute","ec2:DeleteSecurityGroup","ec2:DeleteVolume","ec2:DetachVolume","ec2:RevokeSecurityGroupIngress"],"Resource":"*"}]}'
+aws iam put-role-policy --role-name K8sMaster --policy-name ecr --policy-document '{"Version":"2012-10-17","Statement":[{"Sid":"K8sECR","Effect":"Allow","Action":["ecr:GetAuthorizationToken","ecr:BatchCheckLayerAvailability","ecr:GetDownloadUrlForLayer","ecr:GetRepositoryPolicy","ecr:DescribeRepositories","ecr:ListImages","ecr:BatchGetImage"],"Resource":"*"}]}'
+aws iam put-role-policy --role-name K8sMaster --policy-name cni --policy-document '{"Version":"2012-10-17","Statement":[{"Sid":"K8sNodeAwsVpcCNI","Effect":"Allow","Action":["ec2:CreateNetworkInterface","ec2:AttachNetworkInterface","ec2:DeleteNetworkInterface","ec2:DetachNetworkInterface","ec2:DescribeNetworkInterfaces","ec2:DescribeInstances","ec2:ModifyNetworkInterfaceAttribute","ec2:AssignPrivateIpAddresses","tag:TagResources"],"Resource":"*"}]}'
+aws iam put-role-policy --role-name K8sMaster --policy-name autoscaler --policy-document '{"Version":"2012-10-17","Statement":[{"Sid":"K8sClusterAutoscaler","Effect":"Allow","Action":["autoscaling:DescribeAutoScalingGroups","autoscaling:DescribeAutoScalingInstances","autoscaling:DescribeTags","autoscaling:DescribeLaunchConfigurations","autoscaling:SetDesiredCapacity","autoscaling:TerminateInstanceInAutoScalingGroup"],"Resource":"*"}]}'
+echo $(aws iam create-instance-profile --instance-profile-name K8sMaster | jq -r '.InstanceProfile.Arn')
+aws iam add-role-to-instance-profile --instance-profile-name K8sMaster --role-name K8sMaster
+aws iam create-role --role-name K8sNode --assume-role-policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ec2.amazonaws.com"},"Action":"sts:AssumeRole"}]}' > /dev/null
+aws iam put-role-policy --role-name K8sNode --policy-name node --policy-document '{"Version":"2012-10-17","Statement":[{"Sid":"K8sNodeDescribeResources","Effect":"Allow","Action":["ec2:DescribeInstances","ec2:DescribeRegions"],"Resource":"*"}]}'
+aws iam put-role-policy --role-name K8sNode --policy-name ecr --policy-document '{"Version":"2012-10-17","Statement":[{"Sid":"K8sECR","Effect":"Allow","Action":["ecr:GetAuthorizationToken","ecr:BatchCheckLayerAvailability","ecr:GetDownloadUrlForLayer","ecr:GetRepositoryPolicy","ecr:DescribeRepositories","ecr:ListImages","ecr:BatchGetImage"],"Resource":"*"}]}'
+aws iam put-role-policy --role-name K8sNode --policy-name cni --policy-document '{"Version":"2012-10-17","Statement":[{"Sid":"K8sNodeAwsVpcCNI","Effect":"Allow","Action":["ec2:CreateNetworkInterface","ec2:AttachNetworkInterface","ec2:DeleteNetworkInterface","ec2:DetachNetworkInterface","ec2:DescribeNetworkInterfaces","ec2:DescribeInstances","ec2:ModifyNetworkInterfaceAttribute","ec2:AssignPrivateIpAddresses","tag:TagResources"],"Resource":"*"}]}'
+echo $(aws iam create-instance-profile --instance-profile-name K8sNode | jq -r '.InstanceProfile.Arn')
+aws iam add-role-to-instance-profile --instance-profile-name K8sNode --role-name K8sNode
