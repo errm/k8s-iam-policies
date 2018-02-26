@@ -8,6 +8,9 @@ IAM policies should be best implimented for AWS. Therefor please do not
 rely on the contents of this repository for your own use, rather review them
 and then pull a copy into your own infrastructure as code.
 
+## [node](node.json)
+The minimial required policy for a worker node with the AWS
+cloud provider enabled.
 
 ## [ecr](ecr.json)
 Allows an instance to authenticate with ECR and pull images.
